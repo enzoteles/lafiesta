@@ -10,6 +10,7 @@ android {
         applicationId "br.com.enzoteles.lafiesta"
         minSdkVersion 15
         targetSdkVersion 27
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -55,4 +56,11 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    //GPS
+    implementation 'com.android.support:multidex:1.0.1'
+    implementation 'com.google.android.gms:play-services:11.4.0'
+
+    //multidex
+    compile 'com.android.support:multidex:1.0.3'
 }
