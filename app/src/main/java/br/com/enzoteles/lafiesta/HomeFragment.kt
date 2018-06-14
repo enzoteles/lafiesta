@@ -1,10 +1,14 @@
 package br.com.enzoteles.lafiesta
 
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.ViewModelStoreOwner
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.RequiresApi
+import android.support.v4.app.FragmentActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment: HelpFragment(){
 
-    lateinit var mGPS: GPSTracker
+    var viewModel: HomeViewModel?= null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         var view = inflater!!.inflate(R.layout.fragment_home, container, false)
@@ -32,6 +36,8 @@ class HomeFragment: HelpFragment(){
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProviders.of(activity as FragmentActivity).get(HomeViewModel::class.java)
 
         initSplash()
         initGPS()
@@ -54,13 +60,7 @@ class HomeFragment: HelpFragment(){
      */
     @RequiresApi(Build.VERSION_CODES.M)
     private fun initGPS() {
-
-        mGPS = GPSTracker(activity.baseContext)
-        if(mGPS.canGetLocation()){
-            mGPS.getLocation()
-        }else{
-            HelpLog.error("Unabletofind")
-        }
+       viewModel?.initGPS(activity.baseContext)
     }
 
     /**
@@ -70,9 +70,9 @@ class HomeFragment: HelpFragment(){
 
 
         var data: MutableLiveData<FourSquareJson>?=  MutableLiveData<FourSquareJson>()
-        var latlng = "${mGPS.getLatitude()},${mGPS.getLongitude()}"
+        var latlng = "${viewModel?.getLatitude()},${viewModel?.getLogintude()}"
 
-        HelpLog.info("${mGPS.getLatitude()} -- ${mGPS.getLongitude()}")
+        HelpLog.info("${viewModel?.getLatitude()} -- ${viewModel?.getLogintude()}")
         val api = FourSquareApi(latlng)
         api.consultarNight()
                 ?.subscribeOn(Schedulers.io())
